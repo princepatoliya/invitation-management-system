@@ -1,10 +1,11 @@
 const User = require("../models/user.model");
 
-exports.doesEmailExist = async (email) => {
+exports.doesEmailOrContactExist = async (email, contact) => {
     try {
-        const user = await User.findOne({ email: email });
-        console.log(user);
-        if (user) {
+        const userEmail = await User.findOne({ email: email });
+        const userContact = await User.findOne({ contact: contact });
+        // console.log(user);
+        if (userEmail || userContact) {
             return true;
         }
         return false;

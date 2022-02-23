@@ -7,10 +7,10 @@ exports.register = async (req, res) => {
         const userId = new mongoose.Types.ObjectId();
         const params = { _id: userId, ...req.body };
 
-        const emailExist = await userServices.doesEmailExist(params.email);
+        const emailExist = await userServices.doesEmailOrContactExist(params.email, params.contact);
 
         if (emailExist) {
-            return res.status(400).json({ errorFound: 1, message: "Email already exist" });
+            return res.status(400).json({ errorFound: 1, message: "Email or Contact already exist" });
         }
 
         const user = await User.create(params);
