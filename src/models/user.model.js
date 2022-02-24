@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Event = require("./event.model");
 
 const userSchema = new Schema(
     {
@@ -106,6 +107,14 @@ userSchema.methods.generateAuthToken = async function () {
 
     return token;
 };
+
+userSchema.pre("remove", async function (next) {
+    console.log("Pre remove triggered");
+    console.log(this._id);
+    const event = await Event.remove({ organizer: this._id });
+    console.log(event);
+    next();
+});
 
 const User = mongoose.model("users", userSchema);
 module.exports = User;
