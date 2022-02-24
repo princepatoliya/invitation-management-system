@@ -26,6 +26,11 @@ const eventSchema = new Schema(
             type: Date,
             required: true,
             trim: true,
+            validate(val) {
+                if (val < Date.now()) {
+                    throw new Error("Invalid Date and time");
+                }
+            },
         },
 
         organizer: {

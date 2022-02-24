@@ -35,3 +35,21 @@ exports.createEvent = async (req, res) => {
         res.status(400).json({ errorFound: 1, message: e.toString() });
     }
 };
+
+exports.updateEvent = async (req, res) => {
+    try {
+        const params = { ...req.body };
+        const updatedEvent = await Event.findByIdAndUpdate({ _id: req.params.id }, params);
+    } catch (e) {}
+};
+
+exports.deleteEvent = async (req, res) => {
+    try {
+        const params = { ...req.params };
+        const event = await Event.findByIdAndRemove(params.id);
+
+        res.status(200).json({ errorFound: 0, message: event });
+    } catch (e) {
+        res.status(400).json({ errorFound: 1, message: e.toString() });
+    }
+};
