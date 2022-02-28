@@ -76,6 +76,7 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", async function () {
+    console.log("User save event hit");
     if (this.isModified("password")) {
         return (this.password = await bcrypt.hash(this.password, 12));
     }

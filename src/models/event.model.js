@@ -58,6 +58,14 @@ const eventSchema = new Schema(
     }
 );
 
+eventSchema.pre("save", async function (next) {
+    console.log("Event pre middleware hit");
+
+    if (this.isModified("participants_list")) {
+        console.log("participants list modified");
+    }
+});
+
 const Event = mongoose.model("events", eventSchema);
 
 module.exports = Event;

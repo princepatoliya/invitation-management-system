@@ -38,9 +38,22 @@ exports.createEvent = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
     try {
+        const paramsKeys = Object.keys(req.body);
         const params = { ...req.body };
-        const updatedEvent = await Event.findByIdAndUpdate({ _id: req.params.id }, params);
-    } catch (e) {}
+
+        const allowedParams = ["title", "description", "event_time", "participants_list"];
+        const isValidParams = paramsKeys.every((val) => allowedParams.includes(val));
+
+        if (!isValidParams) return res.status(400).json({ errorFound: 1, message: "Invalid Parameter" });
+
+        const eventObj = await Event.findByIdAndUpdate(req.params.id);
+
+        const updatedEvent = await eventServices.updateEventData(paramsKeys, params, eventObj);
+
+        res.status(200).json({ errorFound: 0, message: updatedEvent });
+    } catch (e) {
+        res.status(400).json({ errorFound: 1, message: e.toString() });
+    }
 };
 
 exports.deleteEvent = async (req, res) => {
